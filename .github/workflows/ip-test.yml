@@ -1,0 +1,30 @@
+name: ip-test
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install --with-deps chromium
+
+      - name: Run IP test
+        run: python ip_test.py
+
+      - name: Upload screenshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: ip-test-result
+          path: ip_test_result.png
